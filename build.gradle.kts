@@ -1,6 +1,7 @@
 val ktorVersion: String by project
 val kotlinVersion: String by project
 val logbackVersion: String by project
+val exposedVersion: String by project
 
 plugins {
     application
@@ -18,10 +19,32 @@ repositories {
     mavenCentral()
 }
 
+ktlint {
+    debug.set(true)
+    verbose.set(true)
+    outputToConsole.set(true)
+    outputColorName.set("RED")
+    disabledRules.set(setOf("final-newline", "no-wildcard-imports"))
+}
+
 dependencies {
+
     // Ktor Server
     implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-auth:$ktorVersion")
+    implementation("io.ktor:ktor-locations:$ktorVersion")
+    implementation("io.ktor:ktor-serialization:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
+
+    // Ktor Client
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+
+    // Database
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
 
     // Logging
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
