@@ -1,7 +1,10 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 val ktorVersion: String by project
 val kotlinVersion: String by project
 val logbackVersion: String by project
 val exposedVersion: String by project
+val koinVersion: String by project
 
 plugins {
     application
@@ -17,6 +20,13 @@ application {
 
 repositories {
     mavenCentral()
+}
+
+tasks.withType<KotlinCompile>().all {
+    kotlinOptions {
+        jvmTarget = "11"
+        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
+    }
 }
 
 ktlint {
@@ -46,8 +56,12 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
 
+    // DI
+    implementation("io.insert-koin:koin-ktor:$koinVersion")
+
     // Logging
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
+    implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
 
     // Testing
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
